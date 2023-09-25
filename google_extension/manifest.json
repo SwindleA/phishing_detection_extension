@@ -1,0 +1,10 @@
+{
+    "name": "Phishing Detection",
+    "description": "Phishing email detection for Chrome",
+    "version": "0.1",
+    "action": {
+      "default_popup": "home.html"
+    },
+      "manifest_version": 3
+  }
+  
