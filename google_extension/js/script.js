@@ -8,17 +8,17 @@ class App{
         
         this.request = new Request();
         
-        this.loginBtn = this.askGPT();
+        this.myButton = this.askGPT();
         
-        const element = document.getElementById("loginBtn");
+        const element = document.getElementById("myButton");
 
       }
       askGPT(){
-        const login = new Button('#myButton', ()=>{
+        const button = new Button('#myButton', ()=>{
             console.log("Hela");
             this.request.post("Hello");
         });
-        login.render();
+        button.render();
     }
 
 }
