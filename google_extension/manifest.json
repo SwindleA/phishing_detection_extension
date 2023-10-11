@@ -5,6 +5,13 @@
     "action": {
       "default_popup": "home.html"
     },
+    "content_scripts":[
+      { 
+        "matches": ["http://localhost:5000/*"],
+        "js":["js/script.js","js/Button.js", "js/request.js"]
+        
+      }
+    ],
       "manifest_version": 3
   }
   
