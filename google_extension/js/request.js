@@ -2,35 +2,21 @@
 
 export class Request{
     constructor(){
-        console.log("Request constructor");
-      this.url = 'https://api.openai.com/v1/chat/completions';
-      this.OPENAI_API_KEY=
-
+        this.serverURL = 'http://127.0.0.1:5000/';
        
     }
-    async post(data){
+    async get(url){
         console.log("asking GPT");
-
-        
-
-        const headers = {
-            Authorization: `Bearer ${this.OPENAI_API_KEY}`,
-            'Content-Type': 'application/json'
-          };
-
-        try{
-            const response = await fetch(this.url,{
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify({
-                    model: "gpt-3.5-turbo",
-                    messages: [{ role: "user", content: data }],
-                  }),
+        try {
+            const response = await fetch(this.serverURL + url,{
+                headers: new Headers({'content-type': 'application/json'}),
+                mode: 'cors'
             });
-            const g = await response.json();
-            console.log("Response: ",g.choices[0].message.content);
-        }catch (error) {
-                 console.error(error);
+            const data = await response.json();
+            return data;
+        }
+        catch (error) {
+            console.error(error);
         }
     }
      

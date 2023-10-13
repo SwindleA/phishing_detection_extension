@@ -16,7 +16,9 @@ class App{
       askGPT(){
         const button = new Button('#myButton', ()=>{
             console.log("Hela");
-            this.request.post("Hello");
+            this.request.get("/testGPT/Hello").then((response)=> {
+                console.log(response)
+            });
         });
         button.render();
     }
