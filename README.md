@@ -40,3 +40,30 @@ WARNING: This is a development server. Do not use it in a production deployment.
  Running on http://127.0.0.1:5000
 Press CTRL+C to quit
 </code></pre>
+
+
+
+# [Optional] First Time Deploying to Google Cloud
+
+1. [Install and setup Google Cloud CLI](https://cloud.google.com/sdk/docs/install-sdk)
+2. Create a [Google Cloud project]('https://cloud.google.com/resource-manager/docs/creating-managing-projects')
+3. [Build and push a Docker image]('https://cloud.google.com/build/docs/build-push-docker-image')
+   1. Upon completion, there should be two new files unique to your project, Dockerfile and cloudbuild.yaml.
+4. Deploying image
+   1. In your Google Cloud project, go to Cloud Run.
+   2. Click the "Create Service" button and use the image you pushed to the Artifact Registry.
+   3. Once the service has been created, go into the services page and make note of the url next to the service name.
+
+# [Optional] Deploying Revisions to Google Cloud
+
+1. Submit the build
+   1. Open the Google Cloud SDK Shell in the same directoy as the project
+   * Run `gcloud builds submit --region=`[your region] `--config cloudbuild.yaml`
+   * This sends the build to the [Artifact Registry](https://console.cloud.google.com/artifacts)
+
+2. Deploy the revision
+   1. Go to the Cloud Run into the service running your application
+   2. Click "Edit & Deploy New Revision"
+      1. Click "Deploy"
+   3. Verify Deployment
+      1. Look at the revisions page of your service and see your revision and the time you deployed it.
