@@ -4,7 +4,7 @@ import openai
 #from AI.key import OPENAI_API_KEY
 import time
 
-openai.api_key = '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' #OPENAI_API_KEY
+openai.api_key = #OPENAI_API_KEY
 
 class chatGPT:
 
