@@ -2,7 +2,7 @@
 
 export class Request{
     constructor(){
-        this.serverURL = 'http://127.0.0.1:5000/';
+        this.serverURL = 'http://127.0.0.1:5000/'//'https://quickstart-image-hd7m2r3zlq-uc.a.run.app';//;
        
     }
     async get(url){
