@@ -5,6 +5,12 @@
     "action": {
       "default_popup": "home.html"
     },
+  "permissions": [
+    "sidePanel"
+  ],
+  "side_panel": {
+      "default_path": "home.html"
+  },
     "content_scripts":[
       { 
         "matches": ["http://localhost:5000/*"],
