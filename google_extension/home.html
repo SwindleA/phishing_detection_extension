@@ -3,15 +3,83 @@
     <head >
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Phishing Detection</title>
-    
+        <title>Phishing Detection System</title>
+
+        <style>
+            /* Style for explanation box */
+            .explanation-text-box {
+                width: 300px;
+                height: 100px;
+                background-color: lightgray;
+                border: 1px solid gray;
+                padding: 10px;
+            }
+
+            /* Style for phishing or not phishing box */
+            .phishing-text-box {
+                width: 300px;
+                height: 10px;
+                background-color: lightgray;
+                border: 1px solid gray;
+                padding: 10px;
+            }
+
+            /* Style for the domain name box */
+            .domain-box {
+                background-color: gray;
+                padding: 2px 6px;
+                border-radius: 5px;
+                color: white;
+            }
+        </style>
     </head>
     
     <body>
-        <h1>Phishing</h1>
+        <h1>Phishing Detection System</h1>
+        Evaluation:
+        <div class="phishing-text-box">
+
+                <span style="color: red;">Phishing Email!</span> / <span style="color: green;">Probably Not Phishing</span>
+
+        </div>
+        <p style="padding-top: 20px;">
+            Explanation for Phishing/or Not:
+        </p>
+
+        <div class="explanation-text-box">
+            This email is phishing because...
+
+            This email is not phishing because...
+        </div>
+
+
+
+        <form style="padding-top: 40px;">
+
+            Reevaluation Checklist:<br><br>
+
+            (no)<br>
+            <label>
+                <input type="checkbox" name="item1"> Do you recognize this person?
+            </label><br>
+
+            <label>
+                <input type="checkbox" name="item2"> Do you recognize this email domain: <span class="domain-box ">{@domain.com}</span>
+            </label><br>
+
+            <label>
+                <input type="checkbox" name="item3"> Is this email reasonable for you current situation?
+            </label><br>
+
+            <label>
+                <input type="checkbox" name="item4"> Is this not a phishing email?
+            </label><br>
+
+        </form>
+
 
         <div class="col text-end " id ='buttons'>
-            <button type="button" id="myButton" class="btn" >Scan Email</button>
+            <button type="button" id="myButton" class="btn" >Reevaluate Email</button>
         </div>
         
         <script type="module" src = "js/script.js"></script>
