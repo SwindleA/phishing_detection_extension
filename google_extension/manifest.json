@@ -18,6 +18,7 @@
         
       }
     ],
+    "icons": { "32": "img/PDS_Icon_32x32.png"},
       "manifest_version": 3
   }
   
