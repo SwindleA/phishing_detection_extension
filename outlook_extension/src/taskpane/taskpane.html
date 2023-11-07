@@ -1,6 +1,3 @@
-<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License. -->
-<!-- This file shows how to design a first-run page that provides a welcome screen to the user about the features of the add-in. -->
-
 <!DOCTYPE html>
 <html>
 
@@ -32,10 +29,52 @@
             your add-in to see app body.</h2>
     </section>
     <main id="app-body" class="ms-welcome__main" style="display: none;">
-        <h2 class="ms-font-xl"> Discover what Office Add-ins can do for you today! </h2>
-        <p><label id="item-subject"></label></p>
-        <div role="button" id="run" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
-            <span class="ms-Button-label">Run</span>
+        <h1>Phishing Detection System</h1>
+        Evaluation:
+        <div class="phishing-text-box">
+
+            <span style="color: red;">Phishing Email!</span> / <span style="color: green;">Probably Not Phishing</span>
+
+        </div>
+        <p style="padding-top: 20px;">
+            Explanation for Phishing/or Not:
+        </p>
+
+        <div class="explanation-text-box">
+            This email is phishing because...
+
+            This email is not phishing because...
+        </div>
+
+        <div id="message">
+
+        </div>
+
+        <form style="padding-top: 40px;">
+
+            Reevaluation Checklist:<br><br>
+            <label>
+                <input type="checkbox" name="item1"> I do not recognize the sender.
+            </label><br>
+
+            <label>
+                <input type="checkbox" name="item2"> I do not recognize the domain of the sender. (<span
+                    id="domain-box">{@domain.com}</span>)
+            </label><br>
+
+            <label>
+                <input type="checkbox" name="item3"> The email is not reasonable for you current situation?
+            </label><br>
+
+            <label>
+                <input type="checkbox" name="item4"> Is this not a phishing email?
+            </label><br>
+
+        </form>
+
+
+        <div class="col text-end " id='buttons'>
+            <button type="button" id="run" class="btn">Reevaluate Email</button>
         </div>
     </main>
 </body>

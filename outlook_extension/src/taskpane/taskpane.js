@@ -9,12 +9,12 @@ Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
-    document.getElementById("run").onclick = run;
+
+    const item = Office.context.mailbox.item;
+    document.getElementById("message").innerHTML =
+      item.subject + "<br />" + item.sender.displayName + "<br />" + item.sender.emailAddress;
+    item.body.getAsync(Office.CoercionType.Text, function (result) {
+      document.getElementById("message").innerHTML += "<br />" + result.value;
+    });
   }
 });
-
-export async function run() {
-  const item = Office.context.mailbox.item;
-
-  document.getElementById("item-subject").innerHTML = "<b>Subject:</b> <br/>" + item.subject;
-}
