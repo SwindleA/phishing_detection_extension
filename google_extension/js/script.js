@@ -1,13 +1,13 @@
 import { Request } from "./request.js";
 import { Button } from "./Button.js";
 
-
+const API_KEY = 'AIzaSyDGyvU7VWNHH9U-9lhb_GVP2YE-gN1OH4s'
 class App{
 
     constructor(){
         
         
-        this.request = new Request();
+        this.requestor = new Request();
 
         this.myButton = this.askGPT();
 
@@ -20,7 +20,7 @@ class App{
       askGPT(){
         const button = new Button('#myButton', ()=>{
             console.log("Hela");
-            this.request.get("/test/GPT/Hello").then((response)=> {
+            this.requestor.get("/test/GPT/Hello").then((response)=> {
                 console.log(response)
             });
         });
@@ -41,50 +41,82 @@ class App{
 
       }
 
+      getToken(){
+          return chrome.identity.getAuthToken();
+      }
+
+      getUserId(){
+          return chrome.identity.getProfileUserInfo().id;
+      }
+
       testGmail(){
           const button = new Button('#testGmail', ()=>{
               console.log("test gmail button");
 
-              const url = "/test/gmailapi"
-             /*chrome.identity.getAuthToken().then((token) => {
-                 console.log(token);
-                 this.request.post(url,token).then((response) =>{
-                     console.log("response: ", response);
-                 })
-
-             });*/
 
 
+              chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                  const tab = tabs[0];
 
-              chrome.identity.getAuthToken({interactive: true}, function(token) {
+                  function printTitle() {
+                      //console.log("inside printTitle func");
+                      const title = document.title;
+                      const resultStr = document.querySelector('[data-message-id]').getAttribute('data-legacy-message-id');
+                      console.log(resultStr);
 
-                  console.log("auth token: ", token);
-
-                  // the example below shows how to use a retrieved access token with an appropriate scope
-                  // to call the Google People API contactGroups.get endpoint
 
 
-                  chrome.identity.getProfileUserInfo(function(accounts){
-                      console.log("accuont id: ",accounts.id);
+                      return resultStr;
+                  };
 
-                      fetch(
-                          'https://gmail.googleapis.com/gmail/v1/users/'+accounts.id+'/labels?key=[APIKEY]',
-                          {headers: new Headers({
-                                  'Authorization': 'Bearer '+token,
-                                  'Accept': 'application/json','content-type': 'application/json'}),
-                                compressed : true,} )
-                          .then((response)=> {
-                              console.log(response.json())
+                  chrome.scripting.executeScript({
+                      target: { tabId: tab.id },
+                      func: printTitle,
+                      }).then((rep) => {
+
+                      const message_id = rep[0]['result'];
+                      console.log("message_id: ", message_id)
+
+                     chrome.identity.getAuthToken({interactive: true}, function(token) {
+
+                          console.log("auth token: ", token);
+
+                          chrome.identity.getProfileUserInfo(function(accounts){
+                              console.log("accuont id: ",accounts.id);
+                              console.log("url: "+'https://gmail.googleapis.com/gmail/v1/users/'+accounts.id+'/messages/'+message_id+'?key='+API_KEY)
+                              fetch(
+                                  'https://gmail.googleapis.com/gmail/v1/users/'+accounts.id+'/messages/'+message_id+'?key='+API_KEY,
+                                  {headers: new Headers({
+                                          'Authorization': 'Bearer '+token,
+                                          'Accept': 'application/json','content-type': 'application/json'}),
+                                      compressed : true,} )
+                                  .then((response)=> {
+                                      response.json().then((element) => {
+
+                                          const email_message = element.snippet;
+                                          console.log(email_message);
+                                          const payload = "Is this a phishing email? \n\n"+email_message;
+                                          console.log(payload);
+
+                                          this.requestor.post("/test/gmailapi", payload).then((response) => {
+                                             console.log(response.json);
+                                          });
+
+                                      });
+
+                                  });
+
+
                           });
+
+                      });
 
 
                   });
-
-
-
-
               });
-              
+
+
+
           });
           button.render();
       }

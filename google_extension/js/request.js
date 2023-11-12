@@ -6,7 +6,7 @@ export class Request{
        
     }
     async get(url){
-        
+
         try {
             const response = await fetch(this.serverURL + url,{
                 headers: new Headers({'content-type': 'application/json'}),
@@ -20,7 +20,9 @@ export class Request{
         }
     }
     async post(url, payload) {
+        console.log("post")
         try {
+
             const response = await fetch(this.serverURL + url, {
                 method: 'POST',
                 headers: new Headers({'content-type': 'application/json'}),
@@ -30,6 +32,7 @@ export class Request{
             return response;
         } catch (error) {
             console.error(error);
+            return "error"
         }
     }
 
