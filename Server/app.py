@@ -7,10 +7,6 @@ from flask_cors import CORS
 
 #gmail imports
 
-
-from googleapiclient.errors import HttpError
-
-
 #codebase imports
 from AI.chatGPT import chatGPT
 
@@ -53,12 +49,6 @@ def testGmail():
         return(json.dumps(formatted),200)
 
 
-
-# @app.route('/test/setcred/<creds>',methods=['POST'])
-# def setCredentials(creds):
-#     if request.method == 'POST':
-#         credentials = creds
-#         return('', 200)
 if __name__ == '__main__':
     app.secret_key = os.urandom(24)
     app.run()
