@@ -1,7 +1,7 @@
 import { Request } from "./request.js";
 import { Button } from "./Button.js";
 
-const API_KEY = 'AIzaSyDGyvU7VWNHH9U-9lhb_GVP2YE-gN1OH4s'
+const API_KEY = ''
 class App{
 
     constructor(){
@@ -39,14 +39,6 @@ class App{
         });
         button.render();
 
-      }
-
-      getToken(){
-          return chrome.identity.getAuthToken();
-      }
-
-      getUserId(){
-          return chrome.identity.getProfileUserInfo().id;
       }
 
       testGmail(){
@@ -98,8 +90,18 @@ class App{
                                           const payload = "Is this a phishing email? \n\n"+email_message;
                                           console.log(payload);
 
-                                          this.requestor.post("/test/gmailapi", payload).then((response) => {
-                                             console.log(response.json);
+                                          const url = "/test/gmailapi";
+
+
+                                          fetch("http://127.0.0.1:5000/" + url, {
+                                              method: 'POST',
+                                              headers: new Headers({'content-type': 'application/json'}),
+                                              mode: 'cors',
+                                              body: JSON.stringify(payload),
+                                          }).then((response) =>{
+                                              response.json().then((element)=>{
+                                                  console.log(element.message);
+                                              })
                                           });
 
                                       });
