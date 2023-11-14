@@ -4,13 +4,18 @@ import json
 # third party imports
 from flask import Flask, request, redirect, url_for, make_response
 from flask_cors import CORS
+
+#gmail imports
+
 #codebase imports
 from AI.chatGPT import chatGPT
 
 app = Flask(__name__, template_folder='extension')
 CORS(app)
 
-@app.route('/testGPT/<question>', methods=['GET'])
+
+
+@app.route('/test/GPT/<question>', methods=['GET'])
 def testGPT(question):
 
     if request.method =='GET':
@@ -20,6 +25,28 @@ def testGPT(question):
         }
         return(json.dumps(formatted),200)
 
+@app.route('/test/gmailapi',methods=['POST'])
+def testGmail():
+
+    if request.method == 'POST':
+
+        print("here")
+
+        question = request.get_json()
+
+        print("json: ", question)
+
+        email_question = chatGPT.askQuestion(question)
+
+        print("email question: ", email_question)
+
+        formatted = {
+            "message": email_question
+        }
+
+
+
+        return(json.dumps(formatted),200)
 
 
 if __name__ == '__main__':

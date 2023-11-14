@@ -1,10 +1,10 @@
 import os
 
 import openai
-#from AI.key import OPENAI_API_KEY
+from AI.key import OPENAI_API_KEY
 import time
 
-openai.api_key = #OPENAI_API_KEY
+openai.api_key = OPENAI_API_KEY
 
 class chatGPT:
 
@@ -15,7 +15,7 @@ class chatGPT:
             try:
 
                 response = openai.ChatCompletion.create(
-                    model="gpt-4",
+                    model="gpt-3.5-turbo",
                     messages=[{"role": "user", "content" : question}],
                     temperature=0.7,
                     max_tokens=2048,
