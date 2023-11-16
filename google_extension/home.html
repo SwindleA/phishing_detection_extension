@@ -9,19 +9,22 @@
             /* Style for explanation box */
             .explanation-text-box {
                 width: 300px;
-                height: 100px;
+                height: 350px;
                 background-color: lightgray;
                 border: 1px solid gray;
                 padding: 10px;
+                font-size: 15px;
             }
 
             /* Style for phishing or not phishing box */
             .phishing-text-box {
                 width: 300px;
-                height: 10px;
+                height: 15px;
                 background-color: lightgray;
                 border: 1px solid gray;
                 padding: 10px;
+
+                font-size: 20px;
             }
 
             /* Style for the domain name box */
@@ -37,24 +40,17 @@
     <body>
         <h1>Phishing Detection System</h1>
         Evaluation:
-        <div class="phishing-text-box">
+        <div class="phishing-text-box" id = "phishing-text-box"></div>
 
-                <span style="color: red;">Phishing Email!</span> / <span style="color: green;">Probably Not Phishing</span>
-
-        </div>
         <p style="padding-top: 20px;">
             Explanation for Phishing/or Not:
         </p>
 
-        <div class="explanation-text-box">
-            This email is phishing because...
-
-            This email is not phishing because...
-        </div>
+        <div class="explanation-text-box" id = "explanation-text-box"></div>
 
 
 
-        <form style="padding-top: 40px;">
+        <!--<form style="padding-top: 40px;">
 
             Reevaluation Checklist:<br><br>
 
@@ -75,21 +71,23 @@
                 <input type="checkbox" name="item4"> Is this not a phishing email?
             </label><br>
 
-        </form>
+        </form>-->
 
 
         <div class="col text-end " id ='buttons'>
-            <button type="button" id="myButton" class="btn" >Reevaluate Email</button><br>
+            <button type="button" id="testGmail" class="btn" >Evaluate Email</button><br>
+
+<!--            <button type="button" id="myButton" class="btn" >Reevaluate Email</button><br>-->
         
             <button type="button" id="loginButton" class="btn" >Login Page</button>
-            <button type="button" id="testGmail" class="btn" >Test Gmail</button>
+
 
         </div>
         
         <script type="module" src = "js/script.js"></script>
 
 
-        <!-- <script type="module" src="/js/api.js"></script> -->
+
     </body>
 
     <!-- To use, open email and then open the extension and press the analyze button which checks to see if the email is phishing. 
