@@ -25,26 +25,19 @@ def testGPT(question):
         }
         return(json.dumps(formatted),200)
 
-@app.route('/test/gmailapi',methods=['POST'])
+@app.route('/evaluate_email',methods=['POST'])
 def testGmail():
 
     if request.method == 'POST':
 
-        print("here")
-
         question = request.get_json()
-
-        print("json: ", question)
 
         email_question = chatGPT.askQuestion(question)
 
-        print("email question: ", email_question)
-
         formatted = {
-            "message": email_question
+            "is_phishing": "Yes/No",
+            "evaluation": email_question
         }
-
-
 
         return(json.dumps(formatted),200)
 
