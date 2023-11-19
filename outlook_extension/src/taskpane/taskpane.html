@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Contoso Task Pane Add-in</title>
+    <title>Phishing Detection System</title>
 
     <!-- Office JavaScript API -->
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
@@ -19,16 +19,11 @@
 </head>
 
 <body class="ms-font-m ms-welcome ms-Fabric">
-    <header class="ms-welcome__header ms-bgColor-neutralLighter">
-        <img width="90" height="90" src="../../assets/logo-filled.png" alt="Contoso" title="Contoso" />
-        <h1 class="ms-font-su">Welcome</h1>
-    </header>
-    <section id="sideload-msg" class="ms-welcome__main">
-        <h2 class="ms-font-xl">Please <a target="_blank"
-                href="https://learn.microsoft.com/office/dev/add-ins/testing/test-debug-office-add-ins#sideload-an-office-add-in-for-testing">sideload</a>
-            your add-in to see app body.</h2>
-    </section>
     <main id="app-body" class="ms-welcome__main" style="display: none;">
+        <section id="sideload-msg" class="ms-welcome__main">
+            <h2 class="ms-font-xl">Loading...</h2>
+        </section>
+
         <h1>Phishing Detection System</h1>
         Evaluation:
         <div class="phishing-text-box">
@@ -46,35 +41,31 @@
             This email is not phishing because...
         </div>
 
-        <div id="message">
-
-        </div>
-
         <form style="padding-top: 40px;">
 
             Reevaluation Checklist:<br><br>
             <label>
-                <input type="checkbox" name="item1"> I do not recognize the sender.
+                <input type="checkbox" name="item1"> I do not recognize the sender. (<span id="sender-box"></span>)
             </label><br>
 
             <label>
                 <input type="checkbox" name="item2"> I do not recognize the domain of the sender. (<span
-                    id="domain-box">{@domain.com}</span>)
+                    id="domain-box"></span>)
             </label><br>
 
             <label>
-                <input type="checkbox" name="item3"> The email is not reasonable for you current situation?
+                <input type="checkbox" name="item3"> The email is not reasonable for my current situation.
             </label><br>
 
             <label>
-                <input type="checkbox" name="item4"> Is this not a phishing email?
+                <input type="checkbox" name="item4"> This personally feels like a phishing email to me.
             </label><br>
 
         </form>
 
 
         <div class="col text-end " id='buttons'>
-            <button type="button" id="run" class="btn">Reevaluate Email</button>
+            <button type="button" id="run" class="btn">Re-evaluate Email</button>
         </div>
     </main>
 </body>

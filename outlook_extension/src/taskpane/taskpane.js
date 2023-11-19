@@ -11,10 +11,10 @@ Office.onReady((info) => {
     document.getElementById("app-body").style.display = "flex";
 
     const item = Office.context.mailbox.item;
-    document.getElementById("message").innerHTML =
-      item.subject + "<br />" + item.sender.displayName + "<br />" + item.sender.emailAddress;
+    document.getElementById("sender-box").innerHTML = item.sender.displayName;
+    document.getElementById("domain-box").innerHTML = "@" + item.sender.emailAddress.split("@")[1];
     item.body.getAsync(Office.CoercionType.Text, function (result) {
-      document.getElementById("message").innerHTML += "<br />" + result.value;
+      let body = result.value;
     });
   }
 });
