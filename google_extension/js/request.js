@@ -36,18 +36,5 @@ export class Request{
         }
     }
 
-    /*async getEmailBody(account_id,message_id,token){
-        try{
-            const response = await fetch(
-                'https://gmail.googleapis.com/gmail/v1/users/'+account_id+'/messages/'+message_id+'?key='+this.API_KEY,
-                {headers: new Headers({
-                        'Authorization': 'Bearer '+token,
-                        'Accept': 'application/json','content-type': 'application/json'}),
-                    compressed : true,} )
-        }catch(error){
-            console.error(error);
-        }
-    }*/
-
      
 }

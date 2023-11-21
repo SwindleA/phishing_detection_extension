@@ -9,11 +9,11 @@ class App{
         
         this.requestor = new Request();
 
-        this.myButton = this.askGPT();
+        //this.myButton = this.askGPT();
 
         this.login = this.login();
 
-        this.testgmail = this.testGmail();
+        this.evaluate_email = this.evaluateEmail();
         const element = document.getElementById("myButton");
 
     }
@@ -41,9 +41,9 @@ class App{
 
       }
 
-      testGmail(){
-          const button = new Button('#testGmail', ()=>{
-              console.log("test gmail button");
+      evaluateEmail(){
+          const button = new Button('#evaluateEmail', ()=>{
+              console.log("EvaluateButton");
 
 
 
