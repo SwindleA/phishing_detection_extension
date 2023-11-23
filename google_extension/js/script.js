@@ -1,7 +1,7 @@
 import { Request } from "./request.js";
 import { Button } from "./Button.js";
 
-const API_KEY = ''
+const API_KEY = 
 class App{
 
     constructor(){
@@ -9,25 +9,18 @@ class App{
         
         this.requestor = new Request();
 
-        //this.myButton = this.askGPT();
 
         this.login = this.login();
 
         this.evaluate_email = this.evaluateEmail();
+
+        this.Reevaluate_email = this.ReevaluateEmail();
         const element = document.getElementById("myButton");
 
     }
-      askGPT(){
-        const button = new Button('#myButton', ()=>{
-            console.log("Hela");
-            this.requestor.get("/test/GPT/Hello").then((response)=> {
-                console.log(response)
-            });
-        });
-        button.render();
-      }
 
 
+    // not sure this is needed.
       login(){
         const button = new Button('#loginButton', ()=>{
             console.log("Login Button");
@@ -41,20 +34,33 @@ class App{
 
       }
 
+
+    ReevaluateEmail(){
+        const button = new Button('#reevaluate', ()=>{
+            console.log("ReevaluateButton");
+
+
+        });
+    }
+
+
       evaluateEmail(){
           const button = new Button('#evaluateEmail', ()=>{
               console.log("EvaluateButton");
 
 
+              document.getElementById('loader').style.display = "block";
 
               chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
                   const tab = tabs[0];
 
                   function getMessageId() {
                       //console.log("inside printTitle func");
-                      const title = document.title;
+
                       const resultStr = document.querySelector('[data-message-id]').getAttribute('data-legacy-message-id');
+
                       console.log(resultStr);
+
 
 
 
@@ -91,12 +97,30 @@ class App{
                                       .then((response) => {
                                           response.json().then((element) => {
 
+                                              const sender_email = element.payload.headers[7]['value'];
+                                              console.log(sender_email);
+
+                                              const recipient_email = element.payload.headers[0]['value'];
+                                              console.log(recipient_email);
+
+                                              const subject = element.payload.headers[19]['value'];
+                                              console.log(subject);
+
                                               const email_message = element.snippet;
                                               console.log(email_message);
-                                              const payload = "Is this a phishing email? \n\n" + email_message;
+
+                                              const payload = {
+                                                  'sender_email': sender_email,
+                                                  'recipient_email': recipient_email,
+                                                  'subject': subject,
+                                                  'email_message' : email_message
+                                              }
                                               console.log(payload);
 
                                               const url = "evaluate_email";
+
+
+
 
 
                                               fetch("http://127.0.0.1:5000/" + url, {
@@ -106,9 +130,9 @@ class App{
                                                   body: JSON.stringify(payload),
                                               }).then((response) => {
                                                   response.json().then((element) => {
-                                                      console.log(element.is_phishing);
+                                                      console.log("yes no: ", element.is_phishing);
 
-
+                                                        document.getElementById('loader').style.display = "none";
                                                       const elm = document.getElementById('phishing-text-box');
                                                       if (elm) {
                                                           elm.innerHTML += element.is_phishing;
@@ -116,9 +140,9 @@ class App{
 
                                                       const elm2 = document.getElementById('explanation-text-box');
                                                       if (elm2) {
-                                                          elm2.innerHTML += element.evaluation;
+                                                          elm2.innerHTML = element.evaluation;
                                                       }
-                                                      //console.log(elm.innerHTML); //+= element.is_phishing;
+
 
 
                                                   })

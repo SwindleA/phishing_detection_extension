@@ -30,13 +30,13 @@ def evaluate_email():
 
     if request.method == 'POST':
 
-        question = request.get_json()
+        payload = request.get_json()
         print("Evaluating Email")
-        email_question = chatGPT.askQuestion(question)
-
+        evaluation = 'stuff stuffy stuff'#chatGPT.askQuestion(question)
+        print("Done... Returning answer ....")
         formatted = {
             "is_phishing": "Yes/No",
-            "evaluation": email_question
+            "evaluation":  evaluation
         }
 
         return(json.dumps(formatted),200)
