@@ -9,7 +9,6 @@ class App{
         
         this.requestor = new Request();
 
-        //this.myButton = this.askGPT();
 
         this.login = this.login();
 
@@ -17,17 +16,9 @@ class App{
         const element = document.getElementById("myButton");
 
     }
-      askGPT(){
-        const button = new Button('#myButton', ()=>{
-            console.log("Hela");
-            this.requestor.get("/test/GPT/Hello").then((response)=> {
-                console.log(response)
-            });
-        });
-        button.render();
-      }
 
 
+    // not sure this is needed.
       login(){
         const button = new Button('#loginButton', ()=>{
             console.log("Login Button");
@@ -46,6 +37,7 @@ class App{
               console.log("EvaluateButton");
 
 
+              document.getElementById('loader').style.display = "block";
 
               chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
                   const tab = tabs[0];
@@ -99,6 +91,8 @@ class App{
                                               const url = "evaluate_email";
 
 
+
+
                                               fetch("http://127.0.0.1:5000/" + url, {
                                                   method: 'POST',
                                                   headers: new Headers({'content-type': 'application/json'}),
@@ -108,7 +102,7 @@ class App{
                                                   response.json().then((element) => {
                                                       console.log(element.is_phishing);
 
-
+                                                        document.getElementById('loader').style.display = "none";
                                                       const elm = document.getElementById('phishing-text-box');
                                                       if (elm) {
                                                           elm.innerHTML += element.is_phishing;
@@ -116,9 +110,9 @@ class App{
 
                                                       const elm2 = document.getElementById('explanation-text-box');
                                                       if (elm2) {
-                                                          elm2.innerHTML += element.evaluation;
+                                                          elm2.innerHTML = element.evaluation;
                                                       }
-                                                      //console.log(elm.innerHTML); //+= element.is_phishing;
+
 
 
                                                   })
