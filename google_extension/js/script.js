@@ -1,7 +1,7 @@
 import { Request } from "./request.js";
 import { Button } from "./Button.js";
 
-const API_KEY = 'AIzaSyDGyvU7VWNHH9U-9lhb_GVP2YE-gN1OH4s'
+const API_KEY = 
 class App{
 
     constructor(){
@@ -13,6 +13,8 @@ class App{
         this.login = this.login();
 
         this.evaluate_email = this.evaluateEmail();
+
+        this.Reevaluate_email = this.ReevaluateEmail();
         const element = document.getElementById("myButton");
 
     }
@@ -32,6 +34,16 @@ class App{
 
       }
 
+
+    ReevaluateEmail(){
+        const button = new Button('#reevaluate', ()=>{
+            console.log("ReevaluateButton");
+
+
+        });
+    }
+
+
       evaluateEmail(){
           const button = new Button('#evaluateEmail', ()=>{
               console.log("EvaluateButton");
@@ -44,9 +56,11 @@ class App{
 
                   function getMessageId() {
                       //console.log("inside printTitle func");
-                      const title = document.title;
+
                       const resultStr = document.querySelector('[data-message-id]').getAttribute('data-legacy-message-id');
+
                       console.log(resultStr);
+
 
 
 
@@ -83,12 +97,28 @@ class App{
                                       .then((response) => {
                                           response.json().then((element) => {
 
+                                              const sender_email = element.payload.headers[7]['value'];
+                                              console.log(sender_email);
+
+                                              const recipient_email = element.payload.headers[0]['value'];
+                                              console.log(recipient_email);
+
+                                              const subject = element.payload.headers[19]['value'];
+                                              console.log(subject);
+
                                               const email_message = element.snippet;
                                               console.log(email_message);
-                                              const payload = "Is this a phishing email? \n\n" + email_message;
+
+                                              const payload = {
+                                                  'sender_email': sender_email,
+                                                  'recipient_email': recipient_email,
+                                                  'subject': subject,
+                                                  'email_message' : email_message
+                                              }
                                               console.log(payload);
 
                                               const url = "evaluate_email";
+
 
 
 
@@ -100,7 +130,7 @@ class App{
                                                   body: JSON.stringify(payload),
                                               }).then((response) => {
                                                   response.json().then((element) => {
-                                                      console.log(element.is_phishing);
+                                                      console.log("yes no: ", element.is_phishing);
 
                                                         document.getElementById('loader').style.display = "none";
                                                       const elm = document.getElementById('phishing-text-box');
