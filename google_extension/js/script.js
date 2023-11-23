@@ -1,7 +1,7 @@
 import { Request } from "./request.js";
 import { Button } from "./Button.js";
 
-const API_KEY = 'AIzaSyDGyvU7VWNHH9U-9lhb_GVP2YE-gN1OH4s'
+const API_KEY = ''
 class App{
 
     constructor(){
