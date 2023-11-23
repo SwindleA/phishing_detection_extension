@@ -54,6 +54,14 @@ Press CTRL+C to quit
 
 4. The extension should now appear with the other active Chrome Extensions in the Chrome Browser.
 
+
+# Outlook Addin
+
+Dependencies:
+`npm install -g yo generator-office`
+`npm install office-addin-debugging`
+The template of the outlook addin was added from here: https://learn.microsoft.com/en-us/office/dev/add-ins/quickstarts/outlook-quickstart?tabs=yeomangenerator
+
 # [Optional] First Time Deploying to Google Cloud
 
 1. [Install and setup Google Cloud CLI](https://cloud.google.com/sdk/docs/install-sdk)
