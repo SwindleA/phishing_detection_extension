@@ -86,12 +86,12 @@ class App{
                   };
                   //takes the array if parts in as the parameter, this is for extracting the message from an email
                   function getMessage(part) {
-                      console.log("part: ", part);
+
                       let total=''
                     for(let p=0;p<part.length;p++){
-                        console.log("p: ", part[p]);
+
                         if(part[p].mimeType === 'multipart/alternative'){
-                            console.log("here");
+
                             total += getMessage(part[p].parts);
                         }else if(part[p].mimeType === 'text/plain'){
                             total += part[p].body.data;
@@ -132,7 +132,7 @@ class App{
                                           response.json().then((element) => {
 
                                               //parts are the elements of the readable message, includes images,html stuff, etc...
-                                              console.log(element.payload.parts);
+                                              console.log(element.payload);
                                               //get the plaintext parts of the email
 
                                               let encoded = getMessage(element.payload.parts);
@@ -140,14 +140,31 @@ class App{
                                               // use '-' => '+' and '_'=>'/'
                                               let encoded2 = encoded.replace('-','+');
                                               let encoded3 = encoded2.replace('_','/');
-                                              console.log("encoded:  ",encoded3);
 
-                                                //convert from base64 to plaintext
-                                              let decoded = window.atob(encoded3);
-                                              console.log("decoded: ", decoded);
+                                       //convert from base64 to plaintext
+
+                                              let decoded = '';
+                                              //if there is an error encodeing, it is probably due to the message being too long, supply the AI with a snippet of the message that is provided by the api.
+                                              let truncate_message = '';
+                                              try{
+                                                  decoded=  window.atob(encoded3);
+                                                  truncate_message = 'F';
+                                              }catch(e){
+                                                  console.error(e);
+                                                  decoded = "{The following message is truncated} " + element.snippet;
+                                                  truncate_message = 'T';
+                                              }
+                                              //console.log("decoded: ", decoded);
 
                                               const sender_email = element.payload.headers[7]['value'];
                                               console.log(sender_email);
+                                              //display sender email
+                                              const checklist_senderemail = document.getElementById('sender_email');
+                                              if (checklist_senderemail){
+                                                  checklist_senderemail.innerText  = sender_email;
+                                              }
+
+
 
                                               //split the email by the @ sign, then split by the '>' to remove it from the end. Emails here start with '<' and end with '>', removing the arrows for clarity.
                                               let email_domain = '@'+sender_email.split("@")[1].split('>')[0];
@@ -156,7 +173,13 @@ class App{
                                                 if (checklist_sender){
                                                     checklist_sender.innerText  = email_domain;
                                                 }
-
+                                                // get sender name:
+                                              let sender_name = element.payload.headers[17]['value'].split('"')[1];
+                                                console.log("sender name: ", sender_name);
+                                              const checklist_sendername = document.getElementById('send_name');
+                                              if (checklist_sendername){
+                                                  checklist_sendername.innerText  = sender_name;
+                                              }
                                               const recipient_email = element.payload.headers[0]['value'];
                                               console.log(recipient_email);
 
@@ -196,7 +219,10 @@ class App{
 
                                                       const elm2 = document.getElementById('explanation-text-box');
                                                       if (elm2) {
-                                                          elm2.innerHTML = element.evaluation;
+                                                          if(truncate_message == 'T'){
+                                                              elm2.innerHTML += "The email is too long. The following evaluation is based on the first sentence or two of the email: "
+                                                          }
+                                                          elm2.innerHTML += element.evaluation;
                                                       }
                                                       document.getElementById('reevaluate').style.display = "block";
 
