@@ -16,6 +16,7 @@
                 font-size: 15px;
                 overflow: scroll;
                 word-wrap: break-word;
+                display: block;
             }
 
             /* Style for phishing or not phishing box */
@@ -36,7 +37,15 @@
                 border-radius: 5px;
                 color: white;
             }
-
+            .checklist{
+                display: none;
+                width: 400px;
+                height: 200px;
+                font-size: 20px;
+            }
+            .main_screen{
+                display: block
+            }
             .loader {
                 border: 16px solid #000000; /* Light grey */
                 border-right: 16px solid #7e00c5;
@@ -57,54 +66,66 @@
     </head>
     
     <body>
-        <h1>Phishing Detection System</h1>
-        Evaluation:
-        <div class="phishing-text-box" id = "phishing-text-box"></div>
 
-        <p style="padding-top: 20px;">
-            Explanation for Phishing/or Not:
-        </p>
 
-        <div class="explanation-text-box" id = "explanation-text-box">
-            <div style='display: none' id="loader" class='loader' > </div>
+
+
+            <h1>Phishing Detection System</h1>
+
+         <div id="main_screen" class="main_screen">
+            <h2>Evaluation:</h2>
+            <div class="phishing-text-box" id = "phishing-text-box"></div>
+
+            <p style="padding-top: 20px;">
+                Explanation for Phishing/or Not:
+            </p>
+
+            <div class="explanation-text-box" id = "explanation-text-box">
+                <div style='display: none' id="loader" class='loader' > </div>
+            </div>
+
+
+
+
+
+
+
+            <div class="col text-end " id ='buttons'>
+                <button type="button" id="evaluateEmail"  >Evaluate Email</button><br>
+
+                <button type="button" id="reevaluate" >Reevaluate Email</button><br>
+
+                <button type="button" id="loginButton"  >Login Page</button>
+
+
+            </div>
         </div>
 
+        <div id="checklist" class="checklist" >
+            <form >
+
+                <h2>Reevaluation Checklist:</h2><br><br>
+
+                (no)<br>
+                <label >
+                    <input type="checkbox" name="unknown_name"> Do you recognize this person? <span id="send_name" class="domain-box "></span>
+                </label><br>
+
+                <label>
+                    <input type="checkbox" name="unknown_email_domain"> Do you recognize this email domain: <span id="domain" class="domain-box "></span>
+                </label><br>
+
+                <label>
+                    <input type="checkbox" name="unreasonable_email"> Is this email reasonable for you current situation?
+                </label><br>
 
 
-        <!--<form style="padding-top: 40px;">
 
-            Reevaluation Checklist:<br><br>
+            </form>
 
-            (no)<br>
-            <label>
-                <input type="checkbox" name="item1"> Do you recognize this person?
-            </label><br>
-
-            <label>
-                <input type="checkbox" name="item2"> Do you recognize this email domain: <span class="domain-box ">{@domain.com}</span>
-            </label><br>
-
-            <label>
-                <input type="checkbox" name="item3"> Is this email reasonable for you current situation?
-            </label><br>
-
-            <label>
-                <input type="checkbox" name="item4"> Is this not a phishing email?
-            </label><br>
-
-        </form>-->
-
-
-        <div class="col text-end " id ='buttons'>
-            <button type="button" id="evaluateEmail" class="btn" >Evaluate Email</button><br>
-
-<!--            <button type="button" id="reevaluate" class="btn" >Reevaluate Email</button><br>-->
-        
-            <button type="button" id="loginButton" class="btn" >Login Page</button>
-
+            <button type="button" id="Submit" >Submit</button><br>
 
         </div>
-        
         <script type="module" src = "js/script.js"></script>
 
 
