@@ -19,10 +19,13 @@ class App{
         this.submitChecklist = this.submitChecklist();
 
 
+
+
     }
 
 
     // not sure this is needed.
+    big_payload;
       login(){
         const button = new Button('#loginButton', ()=>{
             console.log("Login Button");
@@ -53,7 +56,28 @@ class App{
                 let checkboxes = document.querySelectorAll('input:checked');
 
                 let checkedItems = Array.from(checkboxes).map(checkbox => checkbox.name);
+
                 console.log(checkedItems);
+                /*for(let i = 0; i<checkedItems.length;i++){
+                    console.log
+                    if(checkedItems[i] === 'unknown_name'){
+                        console.log("here");
+                        this.big_payload['unknown_name'] = "True"
+                    }else if(checkedItems[i] === 'unknown_email'){
+                        this.big_payload["unknown_email"] = "True";
+                    }else if(checkedItems[i] === 'unknown_email_domain'){
+                        this.big_payload["unknown_email_domain"] = "True";
+                    }else if(checkedItems[i] === 'unreasonable_email'){
+                        this.big_payload["unreasonable_email"] = "True";
+                    }
+                }*/
+
+                console.log("Big paylaoad: ",big_payload);
+                this.requestor.post('/reevaluate_email',this.big_payload).then((response) =>{
+                    response.json().then((element) =>{
+                        console.log(element);
+                    })
+                });
 
             });
 
@@ -188,13 +212,15 @@ class App{
 
 
 
-                                              const payload = {
+                                              this.big_payload = {
                                                   'sender_email': sender_email,
+                                                  'sender_email_domain' : email_domain,
+                                                  'sender_name': sender_name,
                                                   'recipient_email': recipient_email,
                                                   'subject': subject,
                                                   'email_message' : decoded
                                               }
-                                              console.log(payload);
+                                              console.log(big_payload);
 
                                               const url = "evaluate_email";
 
@@ -206,7 +232,7 @@ class App{
                                                   method: 'POST',
                                                   headers: new Headers({'content-type': 'application/json'}),
                                                   mode: 'cors',
-                                                  body: JSON.stringify(payload),
+                                                  body: JSON.stringify(big_payload),
                                               }).then((response) => {
                                                   response.json().then((element) => {
                                                       console.log("yes no: ", element.is_phishing);

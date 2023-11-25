@@ -31,8 +31,9 @@ def evaluate_email():
     if request.method == 'POST':
 
         payload = request.get_json()
+        question = "Is this phishing? " + payload['email_message']
         print("Evaluating Email")
-        evaluation = 'stuff stuffy stuff'#chatGPT.askQuestion(question)
+        evaluation = 'stuff stuffy stuff'#chatGPT.askQuestion(question)#
         print("Done... Returning answer ....")
         formatted = {
             "is_phishing": "Yes/No",
@@ -41,6 +42,27 @@ def evaluate_email():
 
         return(json.dumps(formatted),200)
 
+
+#This two  routes will look much differently once the prompt design is completed.
+@app.route('/reevaluate_email',methods=['POST'])
+def reevaluate_email():
+    if request.method == 'POST':
+
+        payload = request.get_json()
+        question = "Is this phishing? " + payload['email_message']
+
+        if(payload['unknown_name'] == 'True'):
+            sender_relationship = "User is unfamiliar with the sender's name"
+        else:
+            sender_relationship = "User is familiar with the sender's name"
+
+
+        evaluation = 'stuff stuffy stuff'#chatGPT.reEvaluation(question)
+        formatted = {
+            "is_phishing": "Yes/No",
+            "evaluation":  evaluation
+        }
+        return(json.dumps(formatted),200)
 
 if __name__ == '__main__':
     app.secret_key = os.urandom(24)
