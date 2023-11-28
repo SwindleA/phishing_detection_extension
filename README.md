@@ -78,3 +78,9 @@ Press CTRL+C to quit
       1. Click "Deploy"
    3. Verify Deployment
       1. Look at the revisions page of your service and see your revision and the time you deployed it.
+
+
+
+# Chrome known issues:
+* emails too long will not work.
+* If the email messages are in a weird format, it wont work. 
