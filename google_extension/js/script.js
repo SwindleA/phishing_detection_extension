@@ -120,6 +120,30 @@ class App{
                                                       }
                                                       //console.log(elm.innerHTML); //+= element.is_phishing;
 
+                                                      //add phishing label to the email
+                                                      // label id is hard coded to be the label id for Adrian's phishing label, this will need to be changed for other accounts.
+                                              //This If statement will need to be modified to follow what the actualy yes/no response will look like.
+                                                      if(element.is_phishing === 'Yes'){
+                                                          console.log("Adding phishing label")
+                                                          let label_payload = {
+                                                              "addLabelIds": [
+                                                                  "Label_3214162170429020544"
+                                                              ]}
+                                                          fetch(
+                                                              'https://gmail.googleapis.com/gmail/v1/users/' + accounts.id + '/messages/' + message_id+'/modify' + '?key=' + API_KEY,
+                                                              {
+                                                                  method: 'POST',
+                                                                  headers: new Headers({
+                                                                      'Authorization': 'Bearer ' + token,
+                                                                      'Accept': 'application/json', 'content-type': 'application/json'
+                                                                  }),
+                                                                  compressed: true,
+                                                                  body:JSON.stringify(label_payload)
+                                                              }).then((response) => {
+                                                                  console.log(response);
+                                                          });
+                                                      }
+
 
                                                   })
                                               });
