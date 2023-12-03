@@ -154,7 +154,21 @@ class App{
                       const message_id = rep[0]['result'];
                       // console.log("message_id: ", message_id)
 
-                      if(message_id == null){console.error("Message Id not found.");}
+                      if(message_id == null){
+                          console.error("Message Id not found.");
+                          document.getElementById('loader').style.display = "none";
+                          const elm = document.getElementById('phishing-text-box');
+                          if (elm) {
+                              elm.innerHTML += "ERROR";
+                          }
+
+                          const elm2 = document.getElementById('explanation-text-box');
+                          if (elm2) {
+                              
+                              elm2.innerHTML += "Make sure you have an email open";
+                          }
+                          return -1;
+                      }
                       else {
                           chrome.identity.getAuthToken({interactive: true}, function (token) {
 
@@ -258,7 +272,7 @@ class App{
                                                   response.json().then((element) => {
                                                       console.log("yes no: ", element.is_phishing);
 
-                                                        document.getElementById('loader').style.display = "none";
+                                                      document.getElementById('loader').style.display = "none";
                                                       const elm = document.getElementById('phishing-text-box');
                                                       if (elm) {
                                                           elm.innerHTML += element.is_phishing;
