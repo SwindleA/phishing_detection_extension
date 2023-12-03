@@ -27,19 +27,38 @@ def testGPT(question):
 
 @app.route('/evaluate_email',methods=['POST'])
 def evaluate_email():
-
     if request.method == 'POST':
+        data = request.get_json()
+        sender_email = data.get('sender_email', '')
+        receiver_email = data.get('receiver_email', '')
+        subject = data.get('subject', '')
+        body_message = data.get('body_message', '')
 
-        question = request.get_json()
-        print("Evaluating Email")
-        email_question = chatGPT.askQuestion(question)
+        phishing_query = (
+            "You are trying to detect phishing emails. "
+            "Here is the sender's email: " + sender_email + " "
+            "Here is the recipient's email: " + receiver_email + " "
+            "Here is the subject of the email: " + subject + " "
+            "Is this email contents phishing: " + body_message
+        )
+        is_phishing_response = chatGPT.askQuestion(phishing_query)
 
-        formatted = {
-            "is_phishing": "Yes/No",
-            "evaluation": email_question
+        explanation_query = (
+            "The following information is from " + ("a phishing email: " if is_phishing_response.strip().lower() == "yes" else "not a phishing email: ") +
+            "Sender's email: " + sender_email + " "
+            "Recipient's email: " + receiver_email + " "
+            "Subject: " + subject + " "
+            "Body: " + body_message + " "
+            "Explain why this email is" + (" " if is_phishing_response.strip().lower() == "yes" else " not ") + "phishing."
+        )
+        explanation_response = chatGPT.askQuestion(explanation_query)
+
+        formatted_response = {
+            "is_phishing": is_phishing_response.strip(),
+            "explanation": explanation_response
         }
 
-        return(json.dumps(formatted),200)
+        return(json.dumps(formatted_response), 200)
 
 
 if __name__ == '__main__':
