@@ -1,7 +1,7 @@
 import { Request } from "./request.js";
 import { Button } from "./Button.js";
 
-const API_KEY = 'AIzaSyDGyvU7VWNHH9U-9lhb_GVP2YE-gN1OH4s'
+const API_KEY = ''
 class App{
 
     constructor(){
@@ -10,7 +10,7 @@ class App{
         this.requestor = new Request();
 
 
-        this.login = this.login();
+        //this.login = this.login();
 
         this.evaluate_email = this.evaluateEmail();
 
@@ -18,14 +18,14 @@ class App{
 
         this.submitChecklist = this.submitChecklist();
 
-
+        let big_payload = {};
 
 
     }
 
 
     // not sure this is needed.
-    big_payload;
+
       login(){
         const button = new Button('#loginButton', ()=>{
             console.log("Login Button");
@@ -73,11 +73,32 @@ class App{
                 }*/
 
                 console.log("Big paylaoad: ",big_payload);
-                this.requestor.post('/reevaluate_email',this.big_payload).then((response) =>{
+                this.requestor.post('reevaluate_email',big_payload).then((response) =>{
                     response.json().then((element) =>{
                         console.log(element);
+
+                        document.getElementById('main_screen').style.display = "block";
+
+                        document.getElementById('checklist').style.display = "none";
+
+                        console.log("yes no: ", element.is_phishing);
+
+                        document.getElementById('loader').style.display = "none";
+                        const elm = document.getElementById('phishing-text-box');
+                        if (elm) {
+                            elm.innerHTML = element.is_phishing;
+                        }
+
+                        const elm2 = document.getElementById('explanation-text-box');
+                        if (elm2) {
+
+                            elm2.innerHTML = element.evaluation;
+                        }
+
                     })
                 });
+
+
 
             });
 
@@ -108,7 +129,7 @@ class App{
 
                       return resultStr;
                   };
-                  //takes the array if parts in as the parameter, this is for extracting the message from an email
+                  //takes the array of parts in as the parameter, this is for extracting the message from an email
                   function getMessage(part) {
 
                       let total=''

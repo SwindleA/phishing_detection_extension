@@ -51,13 +51,13 @@ def reevaluate_email():
         payload = request.get_json()
         question = "Is this phishing? " + payload['email_message']
 
-        if(payload['unknown_name'] == 'True'):
-            sender_relationship = "User is unfamiliar with the sender's name"
-        else:
-            sender_relationship = "User is familiar with the sender's name"
+        #if(payload['unknown_name'] == 'True'):
+            #sender_relationship = "User is unfamiliar with the sender's name"
+        #else:
+            #sender_relationship = "User is familiar with the sender's name"
 
 
-        evaluation = 'stuff stuffy stuff'#chatGPT.reEvaluation(question)
+        evaluation = 'reevaluation stuff'#chatGPT.reEvaluation(question)
         formatted = {
             "is_phishing": "Yes/No",
             "evaluation":  evaluation
