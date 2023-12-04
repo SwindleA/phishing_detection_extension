@@ -56,33 +56,42 @@ class App{
 
         submitChecklist(){
             const button = new Button('#submit',()=>{
+
+
                 let checkboxes = document.querySelectorAll('input:checked');
+                document.getElementById('main_screen').style.display = "block";
+
+                document.getElementById('checklist').style.display = "none";
 
                 let checkedItems = Array.from(checkboxes).map(checkbox => checkbox.name);
 
                 console.log(checkedItems);
-                /*for(let i = 0; i<checkedItems.length;i++){
-                    console.log
+
+                for(let i = 0; i<checkedItems.length;i++){
                     if(checkedItems[i] === 'unknown_name'){
                         console.log("here");
-                        this.big_payload['unknown_name'] = "True"
+                        big_payload['unknown_name'] = "True"
                     }else if(checkedItems[i] === 'unknown_email'){
-                        this.big_payload["unknown_email"] = "True";
+                        big_payload["unknown_email"] = "True";
                     }else if(checkedItems[i] === 'unknown_email_domain'){
-                        this.big_payload["unknown_email_domain"] = "True";
+                        big_payload["unknown_email_domain"] = "True";
                     }else if(checkedItems[i] === 'unreasonable_email'){
-                        this.big_payload["unreasonable_email"] = "True";
+                        big_payload["unreasonable_email"] = "True";
                     }
-                }*/
+                }
 
                 console.log("Big paylaoad: ",big_payload);
+
+
+
+
+                document.getElementById('loader').style.display = "block";
+
                 this.requestor.post('reevaluate_email',big_payload).then((response) =>{
                     response.json().then((element) =>{
                         console.log(element);
 
-                        document.getElementById('main_screen').style.display = "block";
 
-                        document.getElementById('checklist').style.display = "none";
 
                         console.log("yes no: ", element.is_phishing);
 
@@ -95,7 +104,8 @@ class App{
                         const elm2 = document.getElementById('explanation-text-box');
                         if (elm2) {
 
-                            elm2.innerHTML = element.evaluation;
+                            elm2.innerHTML = element.explanation;
+
                         }
 
                     })
@@ -246,6 +256,9 @@ class App{
                                                 }
                                                 // get sender name:
                                               let sender_name = element.payload.headers[17]['value'].split('"')[1];
+                                              if(sender_name == null){
+                                                  sender_name = "Name not given"
+                                              }
                                                 console.log("sender name: ", sender_name);
                                               const checklist_sendername = document.getElementById('send_name');
                                               if (checklist_sendername){
@@ -265,7 +278,12 @@ class App{
                                                   'sender_name': sender_name,
                                                   'recipient_email': recipient_email,
                                                   'subject': subject,
-                                                  'email_message' : decoded
+                                                  'email_message' : decoded,
+                                                  'unknown_name' : null,
+                                                  'unknown_email' : null,
+                                                  'unknown_email_domain' : null,
+                                                  'unreasonable_email' : null
+
                                               }
                                               console.log(big_payload);
 
@@ -296,7 +314,7 @@ class App{
                                               if(truncate_message == 'T'){
                                                               elm2.innerHTML += "The email is too long. The following evaluation is based on the first sentence or two of the email: "
                                                           }
-                                                          elm2.innerHTML = element.explanation;
+                                                          elm2.innerHTML += element.explanation;
                                                       }
                                                       document.getElementById('reevaluate').style.display = "block";
 
