@@ -238,7 +238,7 @@ class App{
 
 
                                               const sender_email = element.payload.headers[7]['value'];
-                                              console.log(sender_email);
+                                              console.log("Sender email: ",sender_email);
                                               //display sender email
                                               const checklist_senderemail = document.getElementById('sender_email');
                                               if (checklist_senderemail){
@@ -255,20 +255,36 @@ class App{
                                                     checklist_sender.innerText  = email_domain;
                                                 }
                                                 // get sender name:
-                                              let sender_name = element.payload.headers[17]['value'].split('"')[1];
-                                              if(sender_name == null){
-                                                  sender_name = "Name not given"
+                                              let sender_name = "";
+                                              if(element.payload.headers[17]['name'] == "From"){
+                                                  sender_name = element.payload.headers[17]['value'].replace(sender_email,'');
+
+                                              }else if(element.payload.headers[18]['name'] == "From"){
+                                                  sender_name = element.payload.headers[18]['value'].replace(sender_email,'');
+                                              }else{
+                                                  sender_name = "Name not given";
                                               }
+                                              
                                                 console.log("sender name: ", sender_name);
                                               const checklist_sendername = document.getElementById('send_name');
                                               if (checklist_sendername){
                                                   checklist_sendername.innerText  = sender_name;
                                               }
                                               const recipient_email = element.payload.headers[0]['value'];
-                                              console.log(recipient_email);
+                                              console.log("recipient email: ",recipient_email);
+                                              let subject = "";
+                                              if(element.payload.headers[19]['name'] == 'Subject'){
+                                                   subject = element.payload.headers[19]['value'];
+                                              }else if(element.payload.headers[21]['name'] == 'Subject'){
+                                                   subject = element.payload.headers[21]['value'];
+                                              }else if(element.payload.headers[20]['name'] == 'Subject'){
+                                                  subject = element.payload.headers[20]['value'];
+                                              }else{
+                                                  subject = "{subject not found}"
+                                              }
 
-                                              const subject = element.payload.headers[19]['value'];
-                                              console.log(subject);
+
+                                              console.log("Subject: " ,subject);
 
 
 
