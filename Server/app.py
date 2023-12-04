@@ -4,6 +4,7 @@ import json
 # third party imports
 from flask import Flask, request, redirect, url_for, make_response
 from flask_cors import CORS
+import time
 
 #gmail imports
 
@@ -32,30 +33,47 @@ def evaluate_email():
         sender_email = data['sender_email']
         recipient_email = data['recipient_email']
         subject = data['subject']
-        body_message = data['body_message']
+        body_message = data['email_message']
 
 
         phishing_query = (
-            "You are trying to detect phishing emails. "
-            "Here is the sender's email: " + sender_email + " "
-            "Here is the recipient's email: " + recipient_email + " "
-            "Here is the subject of the email: " + subject + " "
-            "Is this email contents phishing: " + body_message
+            "You are trying to detect phishing emails.\n"
+            "Here is the sender's email: " + sender_email + "\n"
+            "Here is the recipient's email: " + recipient_email + "\n"
+            "Here is the subject of the email: " + subject + "\n"
+            "Is this email contents phishing: " + body_message + "\n\n"
+            "Respond only yes or no."
         )
+
+
         is_phishing_response = chatGPT.askQuestion(phishing_query)
+        is_phishing_response = is_phishing_response.strip().lower()
+        print(is_phishing_response)
+        print("no" not in is_phishing_response)
+        if ("yes" not in is_phishing_response  and "no" not in is_phishing_response):
+            print("Response Error")
+            time.sleep(20)
+            is_phishing_response = chatGPT.askQuestion(phishing_query)
+
+            if ("yes" not in is_phishing_response  and "no" not in is_phishing_response):
+                is_phishing_response = "Error"
+                print("Response Error")
+
 
         explanation_query = (
-            "The following information is from " + ("a phishing email: " if is_phishing_response.strip().lower() == "yes" else "not a phishing email: ") +
-            "Sender's email: " + sender_email + " "
-            "Recipient's email: " + recipient_email + " "
-            "Subject: " + subject + " "
-            "Body: " + body_message + " "
-            "Explain why this email is" + (" " if is_phishing_response.strip().lower() == "yes" else " not ") + "phishing."
+            "The following information  " + ("is from a phishing email: " if is_phishing_response == "yes" else "is not from a phishing email: ") + "\n"
+            "Sender's email: " + sender_email + "\n"
+            "Recipient's email: " + recipient_email + "\n"
+            "Subject: " + subject + "\n"
+            "Body: " + body_message + "\n"
+            "Explain why this email is" + (" " if is_phishing_response == "yes" else " not ") + "phishing."
         )
-        explanation_response = chatGPT.askQuestion(explanation_query)
 
+        print("\nexplanation query: \n",explanation_query)
+        explanation_response = chatGPT.askQuestion(explanation_query)
+        print("response 2:\n",explanation_response)
         formatted_response = {
-            "is_phishing": is_phishing_response.strip(),
+            "is_phishing": is_phishing_response,
             "explanation": explanation_response
 
         }

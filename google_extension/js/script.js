@@ -2,7 +2,7 @@ import { Request } from "./request.js";
 import { Button } from "./Button.js";
 
 
-const API_KEY = ''
+const API_KEY = 'AIzaSyDGyvU7VWNHH9U-9lhb_GVP2YE-gN1OH4s'
 
 class App{
 
@@ -215,6 +215,11 @@ class App{
                                               }
                                               //console.log("decoded: ", decoded);
 
+                                              if(decoded.length > 4900){
+                                                  decoded = decoded.substring(0,4900);
+                                              }
+
+
                                               const sender_email = element.payload.headers[7]['value'];
                                               console.log(sender_email);
                                               //display sender email
@@ -258,6 +263,7 @@ class App{
                                               console.log(big_payload);
 
 
+
                                               const url = "evaluate_email";
 
 
@@ -268,14 +274,14 @@ class App{
                                                   body: JSON.stringify(big_payload),
                                               }).then((response) => {
                                                   response.json().then((element) => {
-                                                      console.log(element.is_phishing);
+                                                      console.log(element);
 
 
                                                       document.getElementById('loader').style.display = "none";
 
                                                       const elm = document.getElementById('phishing-text-box');
                                                       if (elm) {
-                                                          elm.innerHTML += element.is_phishing;
+                                                          elm.innerHTML = element.is_phishing;
                                                       }
 
                                                       const elm2 = document.getElementById('explanation-text-box');
@@ -283,7 +289,7 @@ class App{
                                               if(truncate_message == 'T'){
                                                               elm2.innerHTML += "The email is too long. The following evaluation is based on the first sentence or two of the email: "
                                                           }
-                                                          elm2.innerHTML += element.evaluation;
+                                                          elm2.innerHTML = element.explanation;
                                                       }
                                                       document.getElementById('reevaluate').style.display = "block";
 
