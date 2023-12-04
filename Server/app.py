@@ -29,15 +29,15 @@ def testGPT(question):
 def evaluate_email():
     if request.method == 'POST':
         data = request.get_json()
-        sender_email = data.get('sender_email', '')
-        receiver_email = data.get('receiver_email', '')
-        subject = data.get('subject', '')
-        body_message = data.get('body_message', '')
+        sender_email = data['sender_email']
+        recipient_email = data['recipient_email']
+        subject = data['subject']
+        body_message = data['body_message']
 
         phishing_query = (
             "You are trying to detect phishing emails. "
             "Here is the sender's email: " + sender_email + " "
-            "Here is the recipient's email: " + receiver_email + " "
+            "Here is the recipient's email: " + recipient_email + " "
             "Here is the subject of the email: " + subject + " "
             "Is this email contents phishing: " + body_message
         )
@@ -46,7 +46,7 @@ def evaluate_email():
         explanation_query = (
             "The following information is from " + ("a phishing email: " if is_phishing_response.strip().lower() == "yes" else "not a phishing email: ") +
             "Sender's email: " + sender_email + " "
-            "Recipient's email: " + receiver_email + " "
+            "Recipient's email: " + recipient_email + " "
             "Subject: " + subject + " "
             "Body: " + body_message + " "
             "Explain why this email is" + (" " if is_phishing_response.strip().lower() == "yes" else " not ") + "phishing."
