@@ -27,20 +27,40 @@ def testGPT(question):
 
 @app.route('/evaluate_email',methods=['POST'])
 def evaluate_email():
-
     if request.method == 'POST':
+        data = request.get_json()
+        sender_email = data['sender_email']
+        recipient_email = data['recipient_email']
+        subject = data['subject']
+        body_message = data['body_message']
 
-        payload = request.get_json()
-        question = "Is this phishing? " + payload['email_message']
-        print("Evaluating Email")
-        evaluation = 'stuff stuffy stuff'#chatGPT.askQuestion(question)#
-        print("Done... Returning answer ....")
-        formatted = {
-            "is_phishing": "Yes/No",
-            "evaluation":  evaluation
+
+        phishing_query = (
+            "You are trying to detect phishing emails. "
+            "Here is the sender's email: " + sender_email + " "
+            "Here is the recipient's email: " + recipient_email + " "
+            "Here is the subject of the email: " + subject + " "
+            "Is this email contents phishing: " + body_message
+        )
+        is_phishing_response = chatGPT.askQuestion(phishing_query)
+
+        explanation_query = (
+            "The following information is from " + ("a phishing email: " if is_phishing_response.strip().lower() == "yes" else "not a phishing email: ") +
+            "Sender's email: " + sender_email + " "
+            "Recipient's email: " + recipient_email + " "
+            "Subject: " + subject + " "
+            "Body: " + body_message + " "
+            "Explain why this email is" + (" " if is_phishing_response.strip().lower() == "yes" else " not ") + "phishing."
+        )
+        explanation_response = chatGPT.askQuestion(explanation_query)
+
+        formatted_response = {
+            "is_phishing": is_phishing_response.strip(),
+            "explanation": explanation_response
+
         }
 
-        return(json.dumps(formatted),200)
+        return(json.dumps(formatted_response), 200)
 
 
 #This two  routes will look much differently once the prompt design is completed.

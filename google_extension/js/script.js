@@ -1,7 +1,9 @@
 import { Request } from "./request.js";
 import { Button } from "./Button.js";
 
+
 const API_KEY = ''
+
 class App{
 
     constructor(){
@@ -14,6 +16,7 @@ class App{
 
         this.evaluate_email = this.evaluateEmail();
 
+
         this.Reevaluate_email = this.ReevaluateEmail();
 
         this.submitChecklist = this.submitChecklist();
@@ -25,7 +28,6 @@ class App{
 
 
     // not sure this is needed.
-
       login(){
         const button = new Button('#loginButton', ()=>{
             console.log("Login Button");
@@ -38,6 +40,7 @@ class App{
         button.render();
 
       }
+
 
 
       ReevaluateEmail(){
@@ -111,7 +114,6 @@ class App{
           const button = new Button('#evaluateEmail', ()=>{
               console.log("EvaluateButton");
 
-
               document.getElementById('loader').style.display = "block";
 
               chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -119,11 +121,9 @@ class App{
 
                   function getMessageId() {
                       //console.log("inside printTitle func");
-
+                      const title = document.title;
                       const resultStr = document.querySelector('[data-message-id]').getAttribute('data-legacy-message-id');
-
                       console.log(resultStr);
-
 
 
 
@@ -257,10 +257,8 @@ class App{
                                               }
                                               console.log(big_payload);
 
+
                                               const url = "evaluate_email";
-
-
-
 
 
                                               fetch("http://127.0.0.1:5000/" + url, {
@@ -270,9 +268,11 @@ class App{
                                                   body: JSON.stringify(big_payload),
                                               }).then((response) => {
                                                   response.json().then((element) => {
-                                                      console.log("yes no: ", element.is_phishing);
+                                                      console.log(element.is_phishing);
+
 
                                                       document.getElementById('loader').style.display = "none";
+
                                                       const elm = document.getElementById('phishing-text-box');
                                                       if (elm) {
                                                           elm.innerHTML += element.is_phishing;
@@ -280,12 +280,13 @@ class App{
 
                                                       const elm2 = document.getElementById('explanation-text-box');
                                                       if (elm2) {
-                                                          if(truncate_message == 'T'){
+                                              if(truncate_message == 'T'){
                                                               elm2.innerHTML += "The email is too long. The following evaluation is based on the first sentence or two of the email: "
                                                           }
                                                           elm2.innerHTML += element.evaluation;
                                                       }
                                                       document.getElementById('reevaluate').style.display = "block";
+
 
 
                                                   })
