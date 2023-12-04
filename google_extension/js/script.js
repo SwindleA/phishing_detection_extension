@@ -1,7 +1,7 @@
 import { Request } from "./request.js";
 import { Button } from "./Button.js";
 
-const API_KEY = ''
+const API_KEY = 'AIzaSyDGyvU7VWNHH9U-9lhb_GVP2YE-gN1OH4s'
 class App{
 
     constructor(){
@@ -9,7 +9,6 @@ class App{
         
         this.requestor = new Request();
 
-        //this.myButton = this.askGPT();
 
         this.login = this.login();
 
@@ -17,15 +16,6 @@ class App{
         const element = document.getElementById("myButton");
 
     }
-      askGPT(){
-        const button = new Button('#myButton', ()=>{
-            console.log("Hela");
-            this.requestor.get("/test/GPT/Hello").then((response)=> {
-                console.log(response)
-            });
-        });
-        button.render();
-      }
 
 
       login(){

@@ -29,32 +29,26 @@ def testGPT(question):
 def evaluate_email():
     if request.method == 'POST':
         data = request.get_json()
-        sender_email = data.get('sender_email', '')
-        sender_email_domain = data.get('sender_email_domain', '')
-        sender_name = data.get('sender_name', '')
-        recipient_email = data.get('recipient_email', '')
-        subject = data.get('subject', '')
-        email_message = data.get('email_message', '')
+        sender_email = data['sender_email']
+        recipient_email = data['recipient_email']
+        subject = data['subject']
+        body_message = data['body_message']
 
         phishing_query = (
             "You are trying to detect phishing emails. "
             "Here is the sender's email: " + sender_email + " "
-            "Sender's email domain: " + sender_email_domain + " "
-            "Sender's name: " + sender_name + " "
             "Here is the recipient's email: " + recipient_email + " "
             "Here is the subject of the email: " + subject + " "
-            "Is this email contents phishing: " + email_message
+            "Is this email contents phishing: " + body_message
         )
         is_phishing_response = chatGPT.askQuestion(phishing_query)
 
         explanation_query = (
             "The following information is from " + ("a phishing email: " if is_phishing_response.strip().lower() == "yes" else "not a phishing email: ") +
             "Sender's email: " + sender_email + " "
-            "Sender's email domain: " + sender_email_domain + " "
-            "Sender's name: " + sender_name + " "
             "Recipient's email: " + recipient_email + " "
             "Subject: " + subject + " "
-            "Email message: " + email_message + " "
+            "Body: " + body_message + " "
             "Explain why this email is" + (" " if is_phishing_response.strip().lower() == "yes" else " not ") + "phishing."
         )
         explanation_response = chatGPT.askQuestion(explanation_query)
