@@ -34,6 +34,7 @@ def evaluate_email():
         subject = data['subject']
         body_message = data['body_message']
 
+
         phishing_query = (
             "You are trying to detect phishing emails. "
             "Here is the sender's email: " + sender_email + " "
@@ -56,10 +57,32 @@ def evaluate_email():
         formatted_response = {
             "is_phishing": is_phishing_response.strip(),
             "explanation": explanation_response
+
         }
 
         return(json.dumps(formatted_response), 200)
 
+
+#This two  routes will look much differently once the prompt design is completed.
+@app.route('/reevaluate_email',methods=['POST'])
+def reevaluate_email():
+    if request.method == 'POST':
+
+        payload = request.get_json()
+        question = "Is this phishing? " + payload['email_message']
+
+        #if(payload['unknown_name'] == 'True'):
+            #sender_relationship = "User is unfamiliar with the sender's name"
+        #else:
+            #sender_relationship = "User is familiar with the sender's name"
+
+
+        evaluation = 'reevaluation stuff'#chatGPT.reEvaluation(question)
+        formatted = {
+            "is_phishing": "Yes/No",
+            "evaluation":  evaluation
+        }
+        return(json.dumps(formatted),200)
 
 if __name__ == '__main__':
     app.secret_key = os.urandom(24)
