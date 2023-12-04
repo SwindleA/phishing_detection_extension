@@ -193,31 +193,38 @@ class App{
                                               //parts are the elements of the readable message, includes images,html stuff, etc...
                                               console.log(element.payload);
                                               //get the plaintext parts of the email
-
-                                              let encoded = getMessage(element.payload.parts);
-                                                // base64 does not support '-' and '_'
-                                              // use '-' => '+' and '_'=>'/'
-                                              let encoded2 = encoded.replace('-','+');
-                                              let encoded3 = encoded2.replace('_','/');
-
-                                       //convert from base64 to plaintext
-
+                                              console.log("PARTS ", element.payload.parts)
                                               let decoded = '';
-                                              //if there is an error encodeing, it is probably due to the message being too long, supply the AI with a snippet of the message that is provided by the api.
                                               let truncate_message = '';
-                                              try{
-                                                  decoded=  window.atob(encoded3);
-                                                  truncate_message = 'F';
-                                              }catch(e){
-                                                  console.error(e);
+                                              if(element.payload.parts == null){
                                                   decoded = "{The following message is truncated} " + element.snippet;
-                                                  truncate_message = 'T';
-                                              }
-                                              //console.log("decoded: ", decoded);
+                                              }else{
+                                                  let encoded = getMessage(element.payload.parts);
+                                                  // base64 does not support '-' and '_'
+                                                  // use '-' => '+' and '_'=>'/'
+                                                  let encoded2 = encoded.replace('-','+');
+                                                  let encoded3 = encoded2.replace('_','/');
 
-                                              if(decoded.length > 4900){
-                                                  decoded = decoded.substring(0,4900);
+                                                  //convert from base64 to plaintext
+
+
+                                                  //if there is an error encodeing, it is probably due to the message being too long, supply the AI with a snippet of the message that is provided by the api.
+
+                                                  try{
+                                                      decoded=  window.atob(encoded3);
+                                                      truncate_message = 'F';
+                                                  }catch(e){
+                                                      console.error(e);
+                                                      decoded = "{The following message is truncated} " + element.snippet;
+                                                      truncate_message = 'T';
+                                                  }
+                                                  //console.log("decoded: ", decoded);
+
+                                                  if(decoded.length > 4900){
+                                                      decoded = decoded.substring(0,4900);
+                                                  }
                                               }
+
 
 
                                               const sender_email = element.payload.headers[7]['value'];
