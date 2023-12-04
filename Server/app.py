@@ -49,7 +49,7 @@ def evaluate_email():
         is_phishing_response = chatGPT.askQuestion(phishing_query)
         is_phishing_response = is_phishing_response.strip().lower()
         print(is_phishing_response)
-        print("no" not in is_phishing_response)
+
         if ("yes" not in is_phishing_response  and "no" not in is_phishing_response):
             print("Response Error")
             time.sleep(20)
@@ -61,12 +61,12 @@ def evaluate_email():
 
 
         explanation_query = (
-            "The following information  " + ("is from a phishing email: " if is_phishing_response == "yes" else "is not from a phishing email: ") + "\n"
+            "The following information  " + ("is from a phishing email: " if "yes" in is_phishing_response  else "is not from a phishing email: ") + "\n"
             "Sender's email: " + sender_email + "\n"
             "Recipient's email: " + recipient_email + "\n"
             "Subject: " + subject + "\n"
             "Body: " + body_message + "\n"
-            "Explain why this email is" + (" " if is_phishing_response == "yes" else " not ") + "phishing."
+            "Explain why this email is" + (" " if "yes" in is_phishing_response  else " not ") + "phishing."
         )
 
         print("\nexplanation query: \n",explanation_query)
@@ -149,7 +149,7 @@ def reevaluate_email():
         print(is_phishing_response)
 
         initial_info2 = (
-                "The following information  " + ("is from a phishing email: " if is_phishing_response == "yes" else "is not from a phishing email: ") + "\n"+
+                "The following information  " + ("is from a phishing email: " if "yes" in is_phishing_response  else "is not from a phishing email: ") + "\n"+
                 sender_relationship+'\n'+
                 email_relationship + '\n'+
                 domain_relationship+'\n'+
@@ -158,7 +158,7 @@ def reevaluate_email():
 
 
         )
-        email2 =("Body of the message: "+body_message+"\n\n\nExplain why this email is" + (" " if is_phishing_response == "yes" else " not ") + "phishing.")
+        email2 =("Body of the message: "+body_message+"\n\n\nExplain why this email is" + (" " if "yes" in is_phishing_response   else " not ") + "phishing.")
 
 
         print("initial info2 : \n", initial_info2)
