@@ -10,8 +10,10 @@
     "identity",
     "identity.email",
     "scripting",
-    "activeTab"
+    "activeTab",
+    "tabs"
   ],
+  "host_permissions": ["*://*/"],
   "side_panel": {
       "default_path": "home.html"
   },

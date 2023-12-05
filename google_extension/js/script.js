@@ -56,33 +56,42 @@ class App{
 
         submitChecklist(){
             const button = new Button('#submit',()=>{
+
+
                 let checkboxes = document.querySelectorAll('input:checked');
+                document.getElementById('main_screen').style.display = "block";
+
+                document.getElementById('checklist').style.display = "none";
 
                 let checkedItems = Array.from(checkboxes).map(checkbox => checkbox.name);
 
                 console.log(checkedItems);
-                /*for(let i = 0; i<checkedItems.length;i++){
-                    console.log
+
+                for(let i = 0; i<checkedItems.length;i++){
                     if(checkedItems[i] === 'unknown_name'){
                         console.log("here");
-                        this.big_payload['unknown_name'] = "True"
+                        big_payload['unknown_name'] = "True"
                     }else if(checkedItems[i] === 'unknown_email'){
-                        this.big_payload["unknown_email"] = "True";
+                        big_payload["unknown_email"] = "True";
                     }else if(checkedItems[i] === 'unknown_email_domain'){
-                        this.big_payload["unknown_email_domain"] = "True";
+                        big_payload["unknown_email_domain"] = "True";
                     }else if(checkedItems[i] === 'unreasonable_email'){
-                        this.big_payload["unreasonable_email"] = "True";
+                        big_payload["unreasonable_email"] = "True";
                     }
-                }*/
+                }
 
                 console.log("Big paylaoad: ",big_payload);
+
+
+
+
+                document.getElementById('loader').style.display = "block";
+
                 this.requestor.post('reevaluate_email',big_payload).then((response) =>{
                     response.json().then((element) =>{
                         console.log(element);
 
-                        document.getElementById('main_screen').style.display = "block";
 
-                        document.getElementById('checklist').style.display = "none";
 
                         console.log("yes no: ", element.is_phishing);
 
@@ -95,7 +104,8 @@ class App{
                         const elm2 = document.getElementById('explanation-text-box');
                         if (elm2) {
 
-                            elm2.innerHTML = element.evaluation;
+                            elm2.innerHTML = element.explanation;
+
                         }
 
                     })
@@ -193,30 +203,42 @@ class App{
                                               //parts are the elements of the readable message, includes images,html stuff, etc...
                                               console.log(element.payload);
                                               //get the plaintext parts of the email
-
-                                              let encoded = getMessage(element.payload.parts);
-                                                // base64 does not support '-' and '_'
-                                              // use '-' => '+' and '_'=>'/'
-                                              let encoded2 = encoded.replace('-','+');
-                                              let encoded3 = encoded2.replace('_','/');
-
-                                       //convert from base64 to plaintext
-
+                                              console.log("PARTS ", element.payload.parts)
                                               let decoded = '';
-                                              //if there is an error encodeing, it is probably due to the message being too long, supply the AI with a snippet of the message that is provided by the api.
                                               let truncate_message = '';
-                                              try{
-                                                  decoded=  window.atob(encoded3);
-                                                  truncate_message = 'F';
-                                              }catch(e){
-                                                  console.error(e);
+                                              if(element.payload.parts == null){
                                                   decoded = "{The following message is truncated} " + element.snippet;
-                                                  truncate_message = 'T';
+                                              }else{
+                                                  let encoded = getMessage(element.payload.parts);
+                                                  // base64 does not support '-' and '_'
+                                                  // use '-' => '+' and '_'=>'/'
+                                                  let encoded2 = encoded.replace('-','+');
+                                                  let encoded3 = encoded2.replace('_','/');
+
+                                                  //convert from base64 to plaintext
+
+
+                                                  //if there is an error encodeing, it is probably due to the message being too long, supply the AI with a snippet of the message that is provided by the api.
+
+                                                  try{
+                                                      decoded=  window.atob(encoded3);
+                                                      truncate_message = 'F';
+                                                  }catch(e){
+                                                      console.error(e);
+                                                      decoded = "{The following message is truncated} " + element.snippet;
+                                                      truncate_message = 'T';
+                                                  }
+                                                  //console.log("decoded: ", decoded);
+
+                                                  if(decoded.length > 4900){
+                                                      decoded = decoded.substring(0,4900);
+                                                  }
                                               }
-                                              //console.log("decoded: ", decoded);
+
+
 
                                               const sender_email = element.payload.headers[7]['value'];
-                                              console.log(sender_email);
+                                              console.log("Sender email: ",sender_email);
                                               //display sender email
                                               const checklist_senderemail = document.getElementById('sender_email');
                                               if (checklist_senderemail){
@@ -233,17 +255,38 @@ class App{
                                                     checklist_sender.innerText  = email_domain;
                                                 }
                                                 // get sender name:
-                                              let sender_name = element.payload.headers[17]['value'].split('"')[1];
+                                              let sender_name = "";
+                                              if(element.payload.headers[17]['name'] == "From"){
+                                                  sender_name = element.payload.headers[17]['value'].replace(sender_email,'');
+
+                                              }else if(element.payload.headers[18]['name'] == "From"){
+                                                  sender_name = element.payload.headers[18]['value'].replace(sender_email,'');
+                                              }else if(element.payload.headers[14]['name'] == "From"){
+                                                  sender_name = element.payload.headers[14]['value'].replace(sender_email,'');
+                                              }else{
+                                                  sender_name = "Name not given";
+                                              }
+
                                                 console.log("sender name: ", sender_name);
                                               const checklist_sendername = document.getElementById('send_name');
                                               if (checklist_sendername){
                                                   checklist_sendername.innerText  = sender_name;
                                               }
                                               const recipient_email = element.payload.headers[0]['value'];
-                                              console.log(recipient_email);
+                                              console.log("recipient email: ",recipient_email);
+                                              let subject = "";
+                                              if(element.payload.headers[19]['name'] == 'Subject'){
+                                                   subject = element.payload.headers[19]['value'];
+                                              }else if(element.payload.headers[21]['name'] == 'Subject'){
+                                                   subject = element.payload.headers[21]['value'];
+                                              }else if(element.payload.headers[20]['name'] == 'Subject'){
+                                                  subject = element.payload.headers[20]['value'];
+                                              }else{
+                                                  subject = "{subject not found}"
+                                              }
 
-                                              const subject = element.payload.headers[19]['value'];
-                                              console.log(subject);
+
+                                              console.log("Subject: " ,subject);
 
 
 
@@ -253,9 +296,15 @@ class App{
                                                   'sender_name': sender_name,
                                                   'recipient_email': recipient_email,
                                                   'subject': subject,
-                                                  'email_message' : decoded
+                                                  'email_message' : decoded,
+                                                  'unknown_name' : null,
+                                                  'unknown_email' : null,
+                                                  'unknown_email_domain' : null,
+                                                  'unreasonable_email' : null
+
                                               }
                                               console.log(big_payload);
+
 
 
                                               const url = "evaluate_email";
@@ -268,26 +317,51 @@ class App{
                                                   body: JSON.stringify(big_payload),
                                               }).then((response) => {
                                                   response.json().then((element) => {
-                                                      console.log(element.is_phishing);
+                                                      console.log(element);
 
 
                                                       document.getElementById('loader').style.display = "none";
 
                                                       const elm = document.getElementById('phishing-text-box');
                                                       if (elm) {
-                                                          elm.innerHTML += element.is_phishing;
+                                                          elm.innerHTML = element.is_phishing;
                                                       }
 
                                                       const elm2 = document.getElementById('explanation-text-box');
                                                       if (elm2) {
-                                              if(truncate_message == 'T'){
+                                                          if(truncate_message == 'T'){
                                                               elm2.innerHTML += "The email is too long. The following evaluation is based on the first sentence or two of the email: "
                                                           }
-                                                          elm2.innerHTML += element.evaluation;
+                                                          elm2.innerHTML += element.explanation;
                                                       }
                                                       document.getElementById('reevaluate').style.display = "block";
 
+                                                        //add phishing label to the email
+                                                      // label id is hard coded to be the label id for Adrian's phishing label, this will need to be changed for other accounts.
+                                              //This If statement will need to be modified to follow what the actualy yes/no response will look like.
+                                                      if(element.is_phishing.includes( 'yes')) {
+                                                          console.log("Adding phishing label")
+                                                          let label_payload = {
+                                                              "addLabelIds": [
+                                                                  "Label_3214162170429020544"
+                                                              ]
+                                                          }
+                                                          fetch(
+                                                              'https://gmail.googleapis.com/gmail/v1/users/' + accounts.id + '/messages/' + message_id + '/modify' + '?key=' + API_KEY,
+                                                              {
+                                                                  method: 'POST',
+                                                                  headers: new Headers({
+                                                                      'Authorization': 'Bearer ' + token,
+                                                                      'Accept': 'application/json',
+                                                                      'content-type': 'application/json'
+                                                                  }),
+                                                                  compressed: true,
+                                                                  body: JSON.stringify(label_payload)
+                                                              }).then((response) => {
+                                                              console.log(response);
+                                                                });
 
+                                                      }
 
                                                   })
                                               });

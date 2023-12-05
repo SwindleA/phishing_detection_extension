@@ -38,7 +38,7 @@ class chatGPT:
         return response['choices'][0]['message']['content']
 
 
-    def reEvaluation(question):
+    def reEvaluation(initial_info,prompt):
 
         while True:
 
@@ -46,7 +46,7 @@ class chatGPT:
 
                 response = openai.ChatCompletion.create(
                     model="gpt-3.5-turbo",
-                    messages=[{"role": "user", "content" : question}],
+                    messages=[{"role": "system", "content" : initial_info}, {"role": "user", "content" : prompt}],
                     temperature=0.7,
                     max_tokens=2048,
                     top_p=1.0,
@@ -62,7 +62,8 @@ class chatGPT:
                 print("API exception:", ex)
                 print("Retrying in 10 seconds...")
                 time.sleep(10)
+        return response['choices'][0]['message']['content']
 
 ## for testing
 
-#print(askQuestion("How much do blue whales weigh?"))
+#print(reEvaluation("respond only yes or no","Is 3 greater than 2"))
