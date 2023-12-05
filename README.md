@@ -1,4 +1,14 @@
-browswer extension to help detect phishing emails. could also be a plug-in to outlook. The goal of the code is to have a back-end that handles requests from any front-end and determine if email is phishing or not. 
+
+## Work in progress
+Currently, the code is hard coded to work with specific users. Future work will be towards making the project available to anyone. 
+
+# Phishing Detection System
+Browswer extension to help detect phishing emails. could also be a plug-in to outlook. The goal of the code is to have a back-end that handles requests from any front-end and determine if email is phishing or not. 
+
+## Key features
+* Interaction with Gmail API
+* Interaction with ChatGPT API
+* Google Chrome Extension
 
 
 // TODO: Outline how to run extension and backend. 
